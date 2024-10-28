@@ -2,10 +2,10 @@
 
 namespace Wehaa\LiveupdateBoolean;
 
+use Illuminate\Support\Facades\Config;
 use Laravel\Nova\Fields\Boolean;
-use Config;
 
-class LiveupdateBoolean extends Boolean
+class InlineBoolean extends Boolean
 {
     /**
      * The field's component.
@@ -17,11 +17,12 @@ class LiveupdateBoolean extends Boolean
     /**
      * Resolve the given attribute from the given resource.
      *
-     * @param  mixed  $resource
-     * @param  string  $attribute
+     * @param mixed $resource
+     * @param string $attribute
      * @return bool|null
      */
-    protected function resolveAttribute($resource, $attribute): ?bool {
+    protected function resolveAttribute($resource, $attribute): ?bool
+    {
         $this->setResourceId(data_get($resource, $resource->getKeyName()));
 
         return parent::resolveAttribute($resource, $attribute);
@@ -30,9 +31,17 @@ class LiveupdateBoolean extends Boolean
     /**
      * @param int|null $id
      *
-     * @return LiveupdateBoolean
+     * @return InlineBoolean
      */
-    protected function setResourceId(?int $id): self {
+    protected function setResourceId(?int $id): self
+    {
         return $this->withMeta(['id' => $id, 'nova_path' => Config::get('nova.path')]);
+    }
+
+    public function withinRelation(string $modelClass): self
+    {
+        return $this->withMeta(['extraData' => [
+            'relationClass' => $modelClass,
+        ]]);
     }
 }

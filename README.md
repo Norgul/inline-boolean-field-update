@@ -13,8 +13,8 @@ composer require wehaa/inline-boolean-field-update
 ## Usage
 
 ```php
-use Wehaa\LiveupdateBoolean\LiveupdateBoolean;
+use Wehaa\LiveupdateBoolean\InlineBoolean;
 
-LiveupdateBoolean::make('Active')
+InlineBoolean::make('Active')
 ```
 

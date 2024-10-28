@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import FormField from '../../../../../vendor/laravel/nova/resources/js/mixins/FormField.js'
-import Checkbox from '../../../../../vendor/laravel/nova/resources/js/components/Checkbox.vue'
+import FormField from '../../../vendor/laravel/nova/resources/js/mixins/FormField.js'
+import Checkbox from '../../../vendor/laravel/nova/resources/js/components/Checkbox.vue'
 
 export default {
   components: {Checkbox},
@@ -31,12 +31,14 @@ export default {
       if (newValue !== this.field.value) {
         if (!this.loading) {
           this.loading = true;
-          Nova.request().put(
-              `/nova-api/${this.resourceName}/${this.field.id}/`,
-              {
-                [this.field.attribute]: newValue
-              }
-          )
+
+          Nova.request()
+              .post(`/nova-vendor/inline-boolean-field-update/update/${this.resourceName}`, {
+                _inlineResourceId: this.field.id,
+                _inlineAttribute: this.field.attribute,
+                [this.field.attribute]: newValue,
+                extraData: this.field.extraData,
+              })
               .then(() => {
                 this.loading = false
                 this.field.value = this.newValue
